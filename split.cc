@@ -32,21 +32,66 @@ using namespace std;
 unsigned int split( Chords * factors, unsigned int seq_length, vector<pair<int,int>> * pairs )
 {
 
+	int * V = ( int * ) calloc ( seq_length+1, sizeof( int ) );
+	multimap<int,int> * E = new multimap<int,int> ;
 
 	int i = 0;
 
-	for(int i=0; i<seq_length; i++)
+
+	int * dist = ( int * ) calloc ( seq_length+1, sizeof( int ) );
+
+	for(int i = 0; i<=seq_length; i++)
+		dist[i] = seq_length+1;
+
+	int * prev = ( int * ) calloc ( seq_length+1, sizeof( int ) );
+
+	dist[0] = 0;
+	
+	for(int i=0; i<=seq_length; i++)
 	{
-		if( factors[i].length == 0 )
-		return 0;
+		E->insert(pair<int,int>(i,i+factors[i].length));
+		E->insert(pair<int,int>(i,i+1));
+
+		
 	}
 
-	while( i < seq_length )
+	for(unsigned int a =0; a<=seq_length; a++ )
 	{
-		pairs->push_back( pair<int,int>( i+1, i+factors[i].length ) );
+		for(unsigned int b = 0; b<a;b++ )
+		{
+			pair<int,int> edge(a,b);
+			multimap<int,int>::const_iterator found = E->find ( b );
 
-		i = i + factors[i].length;
+
+  			if ( found != E->end() && found->second == a )
+			{
+
+				if( dist[b] + 1 <dist[a] )
+				{		
+					dist[a] = dist[b] +1;
+					prev[a] = b;
+				}
+
+
+
+			}
+			
+		}
 	}
+
+	int l = seq_length;
+	while( l  > 0 )
+	{
+		unsigned int second = l;
+		unsigned int first = prev[l];
+		l = first;
+		pairs->insert( pairs->begin(), pair<int,int>( first, second ) );
+	}
+
+	free( V );
+	free( E );
+	free( dist );
+	free( prev );
  
 return 0;
 }

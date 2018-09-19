@@ -64,75 +64,94 @@ unsigned int suffix_tree( unsigned int  ** dictionary_array, unsigned int * seq_
 	construct_im( cst, total_dic_array );
 
 	Node current = cst.root();
-
-
-	unsigned int i = 0;	
-	unsigned int k = i ;
-	unsigned int start = k;
-	unsigned int match = 0;
-	bool complete = false;
-	bool matches = false;
-
-
-	while( i < seq_len )
+	
+	for(int a = -20; a<=20; a=a+5 )
 	{
-		start = k;
-		complete = false;
-		matches = false;
+		unsigned int i = 0;	
+		unsigned int k = i ;
+		unsigned int start = k;
+		unsigned int match = 0;
+		bool complete = false;
+		bool matches = false;
+		Node current = cst.root();
 
-		if( cst.child( current, seq_array[k] ) != cst.root() )
+		while( i < seq_len )
 		{
-			for(int j = match; j<cst.depth( cst.child( current, seq_array[start] ) ); j++ )
+			start = k;
+			complete = false;
+			matches = false;
+
+			int s = seq_array[k]+a;
+			if( cst.child( current, s ) != cst.root() )
 			{
-				if( cst.edge( cst.child( current, seq_array[start] ), j+1 ) == seq_array[k] )
+				
+				s = seq_array[start]+a;
+				for(int j = match; j<cst.depth( cst.child( current, s) ); j++ )
 				{
-					match++;
-					k++;
-
-					matches = true;
-
-					if( k >= seq_len )
+					s = seq_array[k]+a;
+					if( cst.edge( cst.child( current, seq_array[start]+a ), j+1 ) == s )
 					{
-						factors[i].length = seq_len - i;
+						match++;
+						k++;
+
+						matches = true;
+
+						if( k >= seq_len )
+						{
+							if( seq_len - i > factors[i].length )
+							{
+								factors[i].length = seq_len - i ;
+								factors[i].t = a/5;	
+							}
+							i++;
+							complete = true;
+
+							break;
+
+						}
+					}
+					else
+					{
+						if( k - i > factors[i].length )
+						{
+							factors[i].length = k - i ;
+							factors[i].t = a/5;	
+						}
 						i++;
-						complete = true;
-
+						matches = false;
+			
 						break;
-
 					}
 				}
-				else
+					
+				if( complete == false && matches == true )
 				{
-					factors[i].length = k - i;
-					i++;
-					matches = false;
-			
-					break;
+					start = k;
+					s =  seq_array[k-1]+a;
+					current = cst.child( current, s );
+				}
+				else if( complete == true || matches == false )
+				{
+					k = i;
+					start = k;
+					current = cst.sl( cst.parent(current) );
+					match = cst.depth(  cst.parent(current) );
 				}
 			}
-					
-			if( complete == false && matches == true )
+			else
 			{
-				start = k;
-				current = cst.child( current, seq_array[k-1] );
-			}
-			else if( complete == true || matches == false )
-			{
+				if( k - i > factors[i].length )
+				{
+					factors[i].length = k - i ;
+					factors[i].t = a/5;	
+				}
+				i++;
 				k = i;
-				start = k;
-				current = cst.sl( cst.parent(current) );
-				match = cst.depth(  cst.parent(current) );
+				current = cst.sl(cst.parent( cst.parent(current) ));
+				match = cst.depth( current );
 			}
-		}
-		else
-		{
-			factors[i].length = k - i ;
-			i++;
-			k = i;
-			current = cst.sl(cst.parent( cst.parent(current) ));
-			match = cst.depth( current );
-		}
 
+		}
 	}
 
 return 0;

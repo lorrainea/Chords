@@ -19,6 +19,7 @@
 #define ALLOC_SIZE               104857
 
 #include <unordered_map>
+#include <map>
 #include <vector>
 
 using namespace std;
@@ -35,6 +36,7 @@ struct Chords
    unsigned int	length;
    unsigned int index;
    unsigned int pos;
+   int t;
  };
 
 

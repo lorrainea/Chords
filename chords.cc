@@ -307,16 +307,24 @@ int main(int argc, char **argv)
 
 
 	vector<pair<int,int>> * pairs = new vector<pair<int,int>>;
-
 	split( factors, seq_length, pairs );
 
+	cout<<"LCP:" ;
 	for(int i=0; i<seq_length; i++)
-		cout<<factors[i].length<<" ";
-
+	{
+		cout<<factors[i].length<<" ";	
+	}
+	cout<<endl;
+	cout<<"Transposition:" ;
+	for(int i=0; i<seq_length; i++)
+	{
+		cout<<factors[i].t<<" ";
+	}
 
 	//if( pairs->size() == 0 )
 		//cout<<"no breakdown"<<endl;
 	cout<<endl;
+
 	for(int i=0; i<pairs->size(); i++)
 		cout<<"("<<pairs->at(i).first<<" -- "<<pairs->at(i).second<<")"<<endl;
 		

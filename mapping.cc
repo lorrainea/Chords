@@ -32,7 +32,7 @@ using namespace std;
 unsigned int create_int_seqs( unsigned char ** dictionary, unsigned char * seq, unsigned int ** dictionary_array, unsigned int * seq_array, unordered_map<string, int> mapping, unsigned int num_dic, unsigned int * dictionary_size, unsigned int * total_dictionary_length )
 { 
 	string note = "";
-	int count = 2;
+	int count = 21;
 
 	for(int i=0; i<strlen( (char*) seq ); i++ )
 	{
@@ -85,6 +85,8 @@ unsigned int create_int_seqs( unsigned char ** dictionary, unsigned char * seq, 
 	int pos = 0;
 	note = "";
 
+
+
 	for(int i=0; i<strlen( (char*) seq ); i++ )
 	{		
 		if( seq[i] != ',' )	
@@ -101,7 +103,8 @@ unsigned int create_int_seqs( unsigned char ** dictionary, unsigned char * seq, 
 		}
 	}
 
-
+	cout<<seq<<endl;
+	
 
 	for(int i=0; i<num_dic; i++ )
 	{
